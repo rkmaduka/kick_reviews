@@ -1,0 +1,1 @@
+web: gunicorn kick_reviews.wsgi --log-file -
