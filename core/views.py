@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, CreateView
+from django.views.generic import TemplateView, CreateView, ListView, DetailView
 from django.core.urlresolvers import reverse_lazy
 from .models import *
 
@@ -11,8 +11,18 @@ class ReviewCreateView(CreateView):
   model = Review
   template_name = "review/review_form.html"
   fields = ['sneaker', 'review']
-  success_url = reverse_lazy('home')
+  success_url = reverse_lazy('review_list')
 
   def form_valid(self, form):
       form.instance.user = self.request.user
       return super(ReviewCreateView, self).form_valid(form)
+
+class ReviewListView(ListView):
+    model = Review
+    template_name = "review/review_list.html"
+
+class ReviewDetailView(DetailView):
+    model = Review
+    template_name = 'review/review_detail.html'
+
+

@@ -24,6 +24,7 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
                   {% if user.is_auntheticated %}
+                  <li><a href="{% url 'review_list' %}">Review</a></li>
                   <li><a href="{% url 'review_create' %}">Add review</a></li>
                   <li><a href="{% url 'auth_logout' %}">Logout</a></li>
                   {% else %}
