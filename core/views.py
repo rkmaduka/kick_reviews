@@ -34,3 +34,17 @@ class ReviewDeleteView(DeleteView):
     model = Review
     template_name = 'review/review_confirm_delete.html'
     success_url = reverse_lazy('review_list')
+    
+class CommentsCreateView(CreateView):
+    model = Comments
+    template_name = "comments/comments_form.html"
+    fields = ['text']
+    
+    def get_success_url(self):
+        return self.object.review.get_absolute_url()
+        
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.review = Review.objects.get(id=self.kwargs['pk'])
+        return super(CommentsCreateView, self).form_valid(form)
+        

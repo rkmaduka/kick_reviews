@@ -9,7 +9,17 @@ class Review(models.Model):
   user = models.ForeignKey(User)
 
   def __unicode__(self):
-    return self.title
+    return self.sneaker
 
   def get_absolute_url(self):
-      return reverse("review_detail", args=[self.id])
+    return reverse("review_detail", args=[self.id])
+  
+class Comments(models.Model):
+    review = models.ForeignKey(Review) 
+    user = models.ForeignKey(User)
+    created_at = models.DateTimeField(auto_now_add=True)
+    text = models.TextField()
+    
+    def _unicode_(self):
+        return self.text  
+        

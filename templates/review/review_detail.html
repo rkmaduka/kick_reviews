@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>{{ review.title }}</h1>
+<h1>{{ review.sneaker }}</h1>
 <p>{{ review.description }}</p>
 <p>Asked by {{ review.user.username }} on {{ review.created_at }}</p>
 {% if review.user == user %}
-<p><a href="{% url 'review_update' pk=question.id %}">Edit review</a></p>
+<p><a href="{% url 'review_update' pk=review.id %}">Edit review</a></p>
 <p><a href="{% url 'review_delete' pk=review.id %}">Delete review</a></p>
 {% endif %}
+<p><a href="{% url 'answer_create' pk=review.id %}">Write comments</a></p>
 {% endblock %}
