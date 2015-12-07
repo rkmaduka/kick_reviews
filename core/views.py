@@ -13,7 +13,7 @@ class ReviewCreateView(CreateView):
   fields = ['sneaker', 'review']
   success_url = reverse_lazy('review_list')
 
-  def form_valid(self, form):
+def form_valid(self, form):
       form.instance.user = self.request.user
       return super(ReviewCreateView, self).form_valid(form)
 
@@ -55,3 +55,11 @@ class CommentsCreateView(CreateView):
         form.instance.review = Review.objects.get(id=self.kwargs['pk'])
         return super(CommentsCreateView, self).form_valid(form)
         
+class CommentsUpdateView(UpdateView):
+    model = Comments
+    pk_url_kwarg = 'comments_pk'
+    template_name = 'comments/comments_form.html'
+    fields = ['text']
+    
+    def get_success_url(self):
+        return self.object.review.get_absolute_url()
