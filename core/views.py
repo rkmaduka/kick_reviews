@@ -63,3 +63,13 @@ class CommentsUpdateView(UpdateView):
     
     def get_success_url(self):
         return self.object.review.get_absolute_url()
+
+class CommentsDeleteView(DeleteView):
+    model = Comments
+    pk_url_kwarg = 'comments_pk'
+    template_name = 'comments/comments_confirm_delete.html'
+    
+    def get_success_url(self):
+        return self.object.review.get_absolute_url()
+        
+        
