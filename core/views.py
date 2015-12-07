@@ -24,7 +24,14 @@ class ReviewListView(ListView):
 class ReviewDetailView(DetailView):
     model = Review
     template_name = 'review/review_detail.html'
-
+    
+def get_context_data(self, **kwargs):
+    context = super(ReviewDetailView, self).get_context_data(**kwargs)
+    review = Review.objects.get(id=self.kwargs['pk'])
+    comments = Comments.objects.filter(review=review)
+    context['comments'] = comments
+    return context
+        
 class ReviewUpdateView(UpdateView):
     model = Review
     template_name = 'review/review_form.html'

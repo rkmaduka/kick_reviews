@@ -7,5 +7,14 @@
 <p><a href="{% url 'review_update' pk=review.id %}">Edit review</a></p>
 <p><a href="{% url 'review_delete' pk=review.id %}">Delete review</a></p>
 {% endif %}
+{% if comments.count > 0 %}
+<h3>{{ comments.count }} Comments{{ comments.count|pluralize }}:</h3>
+{% endif %}
+{% for answer in answers %}
+<div class="panel">
+    <p>{{ comments.text }}</p>
+    <p>Comments by {{ comments.user.username }} on {{ comments.created_at }}</p>
+</div>
+{% endfor %}
 <p><a href="{% url 'answer_create' pk=review.id %}">Write comments</a></p>
 {% endblock %}
