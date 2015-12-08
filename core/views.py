@@ -53,7 +53,7 @@ class ReviewDeleteView(DeleteView):
     
     def get_object(self, *args, **kwargs):
         object = super(ReviewDeleteView, self).get_object(*args, **kwargs)
-        if object.user != self.request.user 
+        if object.user != self.request.user:
             raise PermissionDenied
         return object 
         
@@ -67,7 +67,7 @@ class CommentsCreateView(CreateView):
         
     def form_valid(self, form):
         review = Review.objects.get(id=self.kwargs['pk'])
-        if Comments.objects.filter(review=review, user=self.request.user.exists():
+        if Comments.objects.filter(review=review, user=self.request.user).exists():
             raise PermissionDenied() 
         form.instance.user = self.request.user
         form.instance.review = Review.objects.get(id=self.kwargs['pk'])
@@ -97,7 +97,7 @@ class CommentsDeleteView(DeleteView):
         return self.object.review.get_absolute_url()
     
     def get_object(self, *args, **kwargs):
-        object = super(CommentsDeleteView, self)get_object(*args, **kwargs)
+        object = super(CommentsDeleteView, self).get_object(*args, **kwargs)
         if object.user != self.request.user:
             raise PermissionDenied()
         return object 
@@ -107,7 +107,7 @@ class VoteFormView(FormView):
     
     def form_valid(self, form):
         user = self.request.user
-        review = Review.objects.get(pk=form.data['review])
+        review = Review.objects.get(pk=form.data['review'])
         try:
             comments = Comments.objects.get(pk=form.data["comments"])
             prev_votes = Vote.objects.filter(user=user, comments=comments)
@@ -116,7 +116,7 @@ class VoteFormView(FormView):
                 Vote.objects.create(user=user, comments=comments)
             else:
                 prev_votes[0].delete()
-            return redirect(reverse('review_detail', args=[form.data["review]]))
+            return redirect(reverse('review_detail', args=[form.data["review"]]))
         except:
             prev_votes = Vote.objects.filter(user=user, review=review)
             has_voted = (prev_votes.count()>0)
@@ -134,7 +134,7 @@ class UserDetailView(DetailView):
           
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data(**kwargs)
-        user_in_view = User.objects.get(username=self.kwargs['slug']
+        user_in_view = User.objects.get(username=self.kwargs['slug'])
         reviews = Review.objects.filter(user=user_in_view)
         context['reviews'] = reviews
         comments = Comments.objects.filter(user=user_in_view)
@@ -148,7 +148,7 @@ class UserUpdateView(UpdateView):
     fields = ['email', 'first_name', 'last_name']
             
     def get_success_url(self):
-        return reverse('user_detail ', args=[self.request.user.username]
+        return reverse('user_detail', args=[self.request.user.username])
                 
     def get_object(self, *args, **kwargs):
         object = super(UserUpdateView, self).get_object(*args, **kwargs)
@@ -161,8 +161,12 @@ class UserDeleteView(DeleteView):
     slug_field = "username"
     template_name = 'user/user_confirm_delete.html'
     
-    def get_success_url(self, *args, **kwargs):
+    def get_success_url(self):
+        return reverse_lazy('logout')
+    
+    def get_object(self, *args, **kwargs):
         object = super(UserDeleteView, self).get_object(*args, **kwargs)
+        
         if object != self.request.user:
             raise PermissionDenied()
         return object

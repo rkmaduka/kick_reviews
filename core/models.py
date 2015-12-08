@@ -12,7 +12,7 @@ class Review(models.Model):
     return self.sneaker
 
   def get_absolute_url(self):
-    return reverse("review_detail", args=[self.id])
+    return reverse( "review_detail", args=[self.id])
   
 class Comments(models.Model):
     review = models.ForeignKey(Review) 

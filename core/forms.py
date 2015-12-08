@@ -3,7 +3,7 @@ from .models import *
 
 class VoteForm(forms.ModelForm):
     class Meta:
-        model = VoteForm
+        model = Vote
         exclude = ('user',)
         
         
