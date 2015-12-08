@@ -23,3 +23,11 @@ class Comments(models.Model):
     def _unicode_(self):
         return self.text  
         
+class Vote(models.Model):
+    user = models.ForeignKey(User)
+    question = models.ForeignKey(Review)
+    
+    def _unicode_(self):
+        return "%s upvoted" % (self.user.username)
+        
+        

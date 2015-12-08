@@ -13,5 +13,6 @@ urlpatterns = patterns('',
     url(r'^review/delete/(?P<pk>\d+)/$', login_required(ReviewDeleteView.as_view)(), name = 'review_delete'),
     url(r'^review/(?P<pk>\d+)/comments/create/$', login_required(CommentsCreateView.as_view)(), name = 'comments_create'),
     url(r'^review/(?P<review_pk>\d+/comments/update/(?P<comments_pk>\d+)/$', login_required(CommentsUpdateView.as_view)(), name='comments_update'),
-    url(r'^review/(?P<review_pk>\d+/comments/delete/(?P<comments_pk>\d+)$', login_required(CommentsDeleteView.as_view)(), name='comments_delete'), 
+    url(r'^review/(?P<review_pk>\d+/comments/delete/(?P<comments_pk>\d+)$', login_required(CommentsDeleteView.as_view)(), name='comments_delete'),
+    url(r'^vote/$', login_required(VoteFormView.as_view()), name='vote'),
 )
