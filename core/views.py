@@ -107,12 +107,23 @@ class VoteFormView(FormView):
     
     def form_valid(self, form):
         user = self.request.user
-        review = Review.objects.get(pk=form.data['review]
-        prev_votes = Vote.objects.filter(user=user, review=review)
-        has_voted = (prev_votes.count()>0)
-        if not has_voted
-            Vote.objects.create(user=user, review=review)
-        else:
-            prev_votes[0].delete()
+        review = Review.objects.get(pk=form.data['review])
+        try:
+            comments = Comments.objects.get(pk=form.data["comments"])
+            prev_votes = Vote.objects.filter(user=user, comments=comments)
+            has_voted = (prev_votes.count()>0)
+            if not has_voted:
+                Vote.objects.create(user=user, comments=comments)
+            else:
+                prev_votes[0].delete()
+            return redirect(reverse('review_detail', args=[form.data["review]]))
+        except:
+            prev_votes = Vote.objects.filter(user=user, review=review)
+            has_voted = (prev_votes.count()>0)
+            if not has_voted:
+                Vote.objects.create(user=user, review=review)
+            else:
+                prev_votes[0].delete()
         return redirect('review_list')
+      
         
