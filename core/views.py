@@ -30,6 +30,8 @@ def get_context_data(self, **kwargs):
     review = Review.objects.get(id=self.kwargs['pk'])
     comments = Comments.objects.filter(review=review)
     context['comments'] = comments
+    user_comments = Comments.objects.filter(review=review, user=self.request.user)
+    context['user_comments'] = user_comments
     return context
         
 class ReviewUpdateView(UpdateView):
@@ -63,6 +65,9 @@ class CommentsCreateView(CreateView):
         return self.object.review.get_absolute_url()
         
     def form_valid(self, form):
+        review = Review.objects.get(id=self.kwargs['pk'])
+        if Comments.objects.filter(review=review, user=self.request.user.exists():
+            raise PermissionDenied() 
         form.instance.user = self.request.user
         form.instance.review = Review.objects.get(id=self.kwargs['pk'])
         return super(CommentsCreateView, self).form_valid(form)
