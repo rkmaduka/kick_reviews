@@ -1,3 +1,4 @@
+from django.db.models import Avg
 from django.shortcuts import render, redirect
 from django.views.generic import TemplateView, CreateView, ListView, DetailView, UpdateView, DeleteView, FormView
 from django.core.urlresolvers import reverse_lazy
@@ -34,6 +35,8 @@ def get_context_data(self, **kwargs):
     context['comments'] = comments
     user_comments = Comments.objects.filter(review=review, user=self.request.user)
     context['user_comments'] = user_comments
+    rating = Comments.objects.filter(review=review).aggregate(Avg('rating'))
+    context['rating'] = rating
     return context
         
 class ReviewUpdateView(UpdateView):
@@ -61,7 +64,7 @@ class ReviewDeleteView(DeleteView):
 class CommentsCreateView(CreateView):
     model = Comments
     template_name = "comments/comments_form.html"
-    fields = ['text', 'visibility']
+    fields = ['text', 'visibility', 'rating']
     
     def get_success_url(self):
         return self.object.review.get_absolute_url()
@@ -78,7 +81,7 @@ class CommentsUpdateView(UpdateView):
     model = Comments
     pk_url_kwarg = 'comments_pk'
     template_name = 'comments/comments_form.html'
-    fields = ['text']
+    fields = ['text', 'visibility', 'rating']
     
     def get_success_url(self):
         return self.object.review.get_absolute_url()
