@@ -27,27 +27,29 @@ class Review(models.Model):
     review = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User)
-    visiblity = models.IntegerField(choices=VISIBILITY_CHOICES, default=0)
     image_file = models.ImageField(upload_to=upload_to_location, null=True, blank=True)
-  
+    visibility = models.IntegerField(choices=VISIBILITY_CHOICES, default=0)
+    
     def __unicode__(self):
      return self.sneaker
 
     def get_absolute_url(self):
      return reverse( "review_detail", args=[self.id])
     
-  
+    
+
 class Comments(models.Model):
     review = models.ForeignKey(Review) 
     user = models.ForeignKey(User)
     created_at = models.DateTimeField(auto_now_add=True)
     text = models.TextField()
     rating = models.IntegerField(choices=RATING_CHOICES, default=0)
+    visibility = models.IntegerField(choices=VISIBILITY_CHOICES, default=0)
     
     def _unicode_(self):
         return self.text  
     
-    visiblity = models.IntegerField(choices=VISIBILITY_CHOICES, default=0)
+    
   
 class Vote(models.Model):
     user = models.ForeignKey(User)

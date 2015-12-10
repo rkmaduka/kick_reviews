@@ -15,7 +15,7 @@ class ReviewCreateView(CreateView):
   fields = ['sneaker', 'review', 'visibility', 'image_file']
   success_url = reverse_lazy('review_list')
 
-def form_valid(self, form):
+  def form_valid(self, form):
       form.instance.user = self.request.user
       return super(ReviewCreateView, self).form_valid(form)
 
@@ -28,16 +28,16 @@ class ReviewDetailView(DetailView):
     model = Review
     template_name = 'review/review_detail.html'
     
-def get_context_data(self, **kwargs):
-    context = super(ReviewDetailView, self).get_context_data(**kwargs)
-    review = Review.objects.get(id=self.kwargs['pk'])
-    comments = Comments.objects.filter(review=review)
-    context['comments'] = comments
-    user_comments = Comments.objects.filter(review=review, user=self.request.user)
-    context['user_comments'] = user_comments
-    rating = Comments.objects.filter(review=review).aggregate(Avg('rating'))
-    context['rating'] = rating
-    return context
+    def get_context_data(self, **kwargs):
+        context = super(ReviewDetailView, self).get_context_data(**kwargs)
+        review = Review.objects.get(id=self.kwargs['pk'])
+        comments = Comments.objects.filter(review=review)
+        context['comments'] = comments
+        user_comments = Comments.objects.filter(review=review, user=self.request.user)
+        context['user_comments'] = user_comments
+        rating = Comments.objects.filter(review=review).aggregate(Avg('rating'))
+        context['rating'] = rating
+        return context
         
 class ReviewUpdateView(UpdateView):
     model = Review
